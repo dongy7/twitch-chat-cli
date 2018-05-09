@@ -3,7 +3,6 @@ const os = require('os')
 const path = require('path')
 const chalk = require('chalk')
 const program = require('commander')
-const prompt = require('prompt')
 const ora = require('ora')
 const fetch = require('node-fetch')
 const request = require('request-promise')
@@ -37,7 +36,7 @@ const fetchEmotes = async (channel, emotes, isGlobal) => {
 
   // make sure all images have been fetched before continuing
   await Promise.all(emotes.map(async emote => {
-    const { id, code } = emote
+    const { id } = emote
     const dest = path.join(IMAGES_DIR, `${id}.png`)
     const data = await request({
       url: `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`,
@@ -53,7 +52,7 @@ const createEmoteMap = (emoteList) => {
   const map = {}
   emoteList.forEach(emotes => {
     emotes.forEach(emote => {
-      const { id, code } = emote;
+      const { id, code } = emote
       const img = termImg.string(path.join(IMAGES_DIR, `${id}.png`))
       map[code] = img
     })
@@ -85,7 +84,7 @@ const handleConnect = async (channel) => {
     } else {
       spinner.fail(failMsg)
     }
-  } catch(e) {
+  } catch (e) {
     spinner.fail(failMsg)
   }
 
@@ -119,7 +118,7 @@ program
     fs.ensureDirSync(CONFIG_DIR)
     const login = {
       username,
-      token,
+      token
     }
 
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(login))

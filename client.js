@@ -5,9 +5,9 @@ const trim = require('trim-newlines')
 const hex2dec = (hex) => parseInt(hex, 16)
 
 const hexToRgb = (hex) => {
-  const hexRed = hex.substring(1,3)
-  const hexGreen = hex.substring(3,5)
-  const hexBlue = hex.substring(5,7)
+  const hexRed = hex.substring(1, 3)
+  const hexGreen = hex.substring(3, 5)
+  const hexBlue = hex.substring(5, 7)
 
   return {
     red: hex2dec(hexRed),
@@ -81,7 +81,7 @@ const connect = (login, channel, emotes) => {
 
   const client = new tmi.Client(options)
   client.on('chat', (channel, user, message, self) => {
-    if (user['message-type'] != 'chat') {
+    if (user['message-type'] !== 'chat') {
       return
     }
 

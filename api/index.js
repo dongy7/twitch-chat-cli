@@ -1,13 +1,13 @@
 const express = require('express')
-const pg = require('pg');
+const pg = require('pg')
 
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/emotes';
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/emotes'
 
 const app = express()
 const router = express.Router()
 const port = process.env.PORT || 3000
 
-const client = new pg.Client(connectionString);
+const client = new pg.Client(connectionString)
 client.connect()
   .catch(err => console.error(err))
 
@@ -17,12 +17,12 @@ app.listen(port, () => {
 
 router.route('/channels')
   .get((req, res) => {
-    res.json({ message: "Channels" })
+    res.json({ message: 'Channels' })
   })
 
 router.route('/channels/:name')
   .get((req, res) => {
-    const name = (req.params.name == 'twitch') ? '' : req.params.name
+    const name = (req.params.name === 'twitch') ? '' : req.params.name
     const queryText = `
     SELECT emoticons.code, emoticons.id
     FROM emoticons
