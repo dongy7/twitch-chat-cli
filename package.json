@@ -1,9 +1,24 @@
 {
   "name": "twitch-chat-cli",
   "version": "1.0.0",
-  "main": "cli.js",
-  "author": "Dong Yeop Lee",
+  "description": "CLI for reading Twitch chat",
   "license": "MIT",
+  "repository": "https://github.com/dongy7/twitch-chat-cli",
+  "author": {
+    "name": "Dong Yeop Lee",
+    "email": "dong@dongyeop.com",
+    "url": "https://dongyeop.com"
+  },
+  "main": "cli.js",
+  "bin": "cli.js",
+  "engines": {
+    "node": ">=7.8.0"
+  },
+  "files": [
+    "cli.js",
+    "client.js",
+    "config.js"
+  ],
   "dependencies": {
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
