@@ -33,7 +33,9 @@ const getEmotes = async (channel) => {
 const fetchEmotes = async (channel, emotes) => {
   const spinner = ora(`Fetching emotes for ${channel}`)
   spinner.start()
-  emotes.forEach(async emote => {
+
+  // make sure all images have been fetched before continuing
+  await Promise.all(emotes.map(async emote => {
     const { id, code } = emote
     const dest = path.join(IMAGES_DIR, `${id}.png`)
     const data = await request({
@@ -42,7 +44,7 @@ const fetchEmotes = async (channel, emotes) => {
     })
     const buf = Buffer.from(data, 'utf8')
     await writeFile(dest, buf)
-  })
+  }))
   spinner.succeed()
 }
 
@@ -94,8 +96,8 @@ const handleConnect = async (channel) => {
 
   spinner.succeed()
 
-  fetchEmotes(GLOBAL_CHANNEL, globalEmotes)
-  fetchEmotes(channel, channelEmotes)
+  await fetchEmotes(GLOBAL_CHANNEL, globalEmotes)
+  await fetchEmotes(channel, channelEmotes)
 
   const emotes = createEmoteMap([globalEmotes, channelEmotes])
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))
