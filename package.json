@@ -20,6 +20,15 @@
     "client.js",
     "config.js"
   ],
+  "keywords": [
+    "twitch",
+    "chat",
+    "cli",
+    "cli-app",
+    "term",
+    "emote",
+    "emoticon"
+  ],
   "dependencies": {
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
