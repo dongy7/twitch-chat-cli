@@ -1,5 +1,14 @@
 # twitch-chat-cli
 
+> Read Twitch chat on your terminal
+
+<p align="center">
+	<br>
+	<img width="400" src="demo.gif">
+	<br>
+	<br>
+</p>
+
 ## Installation
 ```
 npm install -g twitch-chat-cli
