@@ -5,10 +5,16 @@
   "author": "Dong Yeop Lee",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
     "fs-extra": "^6.0.0",
+    "node-fetch": "^2.1.2",
+    "ora": "^2.1.0",
     "prompt": "^1.0.0",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "term-img": "^2.1.0",
     "tmi.js": "^1.2.1"
   }
 }
