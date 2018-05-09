@@ -89,18 +89,23 @@ const handleConnect = async (channel) => {
     spinner.fail(failMsg)
   }
 
-  spinner = ora('Downloading channel emotes.')
-  spinner.start()
+  let globalEmotes
+  let channelEmotes
 
-  const globalEmotes = await getEmotes(GLOBAL_CHANNEL)
-  const channelEmotes = await getEmotes(channel)
+  if (api) {
+    spinner = ora('Downloading channel emotes.')
+    spinner.start()
 
-  spinner.succeed()
+    globalEmotes = await getEmotes(GLOBAL_CHANNEL)
+    channelEmotes = await getEmotes(channel)
 
-  await fetchEmotes(GLOBAL_CHANNEL, globalEmotes, true)
-  await fetchEmotes(channel, channelEmotes, false)
+    spinner.succeed()
 
-  const emotes = createEmoteMap([globalEmotes, channelEmotes])
+    await fetchEmotes(GLOBAL_CHANNEL, globalEmotes, true)
+    await fetchEmotes(channel, channelEmotes, false)
+  }
+
+  const emotes = api ? createEmoteMap([globalEmotes, channelEmotes]) : {}
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))
   connect(credentials, channel, emotes)
 }
