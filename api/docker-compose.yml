@@ -1,0 +1,22 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:10.3-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: emotes
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - ./seed:/data
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres/emotes

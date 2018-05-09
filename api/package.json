@@ -1,0 +1,15 @@
+{
+  "name": "twitch-emotes-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dong Yeop Lee",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.17.4",
+    "pg": "^7.4.3"
+  }
+}
