@@ -9,6 +9,7 @@ const fetch = require('node-fetch')
 const request = require('request-promise')
 const Promise = require('bluebird')
 const writeFile = Promise.promisify(fs.writeFile)
+const termImg = require('term-img')
 
 const config = require('./config')
 const connect = require('./client')
@@ -43,6 +44,19 @@ const fetchEmotes = async (channel, emotes) => {
     await writeFile(dest, buf)
   })
   spinner.succeed()
+}
+
+const createEmoteMap = (emoteList) => {
+  const map = {}
+  emoteList.forEach(emotes => {
+    emotes.forEach(emote => {
+      const { id, code } = emote;
+      const img = termImg.string(path.join(IMAGES_DIR, `${id}.png`))
+      map[code] = img
+    })
+  })
+
+  return map
 }
 
 const handleConnect = async (channel) => {
@@ -83,8 +97,9 @@ const handleConnect = async (channel) => {
   fetchEmotes(GLOBAL_CHANNEL, globalEmotes)
   fetchEmotes(channel, channelEmotes)
 
+  const emotes = createEmoteMap([globalEmotes, channelEmotes])
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))
-  connect(credentials, channel)
+  connect(credentials, channel, emotes)
 }
 
 program

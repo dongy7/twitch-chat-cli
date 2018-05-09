@@ -15,7 +15,17 @@ const hexToRgb = (hex) => {
   }
 }
 
-const connect = (login, channel) => {
+const getMsgWithEmotes = (message, emotes) => {
+  const words = message.split(/\s+/)
+  return words.map(word => {
+    if (word in emotes) {
+      return emotes[word]
+    }
+    return word
+  }).join(' ')
+}
+
+const connect = (login, channel, emotes) => {
   const options = {
     options: {
       debug: false
@@ -45,8 +55,9 @@ const connect = (login, channel) => {
     } else {
       displayName = `${chalk.bold(displayName)}`
     }
+    const displayMessage = getMsgWithEmotes(message, emotes)
 
-    console.log(`${displayName}: ${message}`)
+    console.log(`${displayName}: ${displayMessage}`)
   })
 
   client.connect()
