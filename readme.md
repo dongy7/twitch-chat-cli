@@ -1,5 +1,10 @@
 # twitch-chat-cli
 
+## Installation
+```
+npm install -g twitch-chat-cli
+```
+
 ## Usage
 
 First generate an [OAuth token](https://twitchapps.com/tmi/) to connect to the Twitch IRC.
@@ -7,13 +12,13 @@ First generate an [OAuth token](https://twitchapps.com/tmi/) to connect to the T
 Add your OAuth token:
 
 ```
-node cli.js add <username> <token>
+tc add <username> <token>
 ```
 
 Connect to a channel to start reading chat:
 
 ```
-node cli.js connect <channel-name>
+tc connect <channel-name>
 ```
 
 ## Emotes

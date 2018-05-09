@@ -9,8 +9,9 @@
     "email": "dong@dongyeop.com",
     "url": "https://dongyeop.com"
   },
-  "main": "cli.js",
-  "bin": "cli.js",
+  "bin": {
+    "tc": "cli.js"
+  },
   "engines": {
     "node": ">=7.8.0"
   },
