@@ -1,6 +1,6 @@
 {
   "name": "twitch-chat-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "CLI for reading Twitch chat",
   "license": "MIT",
   "repository": "https://github.com/dongy7/twitch-chat-cli",
