@@ -1,5 +1,6 @@
 const tmi = require('tmi.js')
 const chalk = require('chalk')
+const trim = require('trim-newlines')
 
 const hex2dec = (hex) => parseInt(hex, 16)
 
@@ -17,12 +18,12 @@ const hexToRgb = (hex) => {
 
 const getMsgWithEmotes = (message, emotes) => {
   const words = message.split(/\s+/)
-  return words.map(word => {
+  return trim(words.map(word => {
     if (word in emotes) {
-      return emotes[word]
+      return emotes[word] + '\n'
     }
     return word
-  }).join(' ')
+  }).join(' '))
 }
 
 const connect = (login, channel, emotes) => {
