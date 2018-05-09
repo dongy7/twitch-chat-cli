@@ -71,7 +71,7 @@ const handleConnect = async (channel) => {
   fs.ensureDirSync(EMOTICON_DIR)
   fs.ensureDirSync(IMAGES_DIR)
 
-  let spinner = ora(`Checking for emoticon api`)
+  let spinner = ora(`Checking for emoticon api.`)
   spinner.start()
   const failMsg = 'No emoticon api found. Emotes will be displayed as text.'
   let api = false
@@ -93,7 +93,7 @@ const handleConnect = async (channel) => {
   let channelEmotes
 
   if (api) {
-    spinner = ora('Downloading channel emotes.')
+    spinner = ora('Fetching channel emoticon metadata.')
     spinner.start()
 
     globalEmotes = await getEmotes(GLOBAL_CHANNEL)

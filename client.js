@@ -1,6 +1,7 @@
 const tmi = require('tmi.js')
 const chalk = require('chalk')
 const trim = require('trim-newlines')
+const ora = require('ora')
 
 const hex2dec = (hex) => parseInt(hex, 16)
 
@@ -80,6 +81,9 @@ const connect = (login, channel, emotes) => {
   }
 
   const client = new tmi.Client(options)
+  const spinner = ora(`Connecting to ${chalk.underline(`twitch.tv/${channel}`)}.`)
+  spinner.start()
+
   client.on('chat', (channel, user, message, self) => {
     if (user['message-type'] !== 'chat') {
       return
@@ -91,6 +95,9 @@ const connect = (login, channel, emotes) => {
     console.log(`${displayName}: ${displayMessage}`)
   })
 
+  client.on('connected', () => {
+    spinner.succeed()
+  })
   client.connect()
 }
 
