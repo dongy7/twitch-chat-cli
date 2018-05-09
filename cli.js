@@ -30,8 +30,9 @@ const getEmotes = async (channel) => {
   return json
 }
 
-const fetchEmotes = async (channel, emotes) => {
-  const spinner = ora(`Fetching emotes for ${channel}`)
+const fetchEmotes = async (channel, emotes, isGlobal) => {
+  const msg = isGlobal ? 'Fetching global emotes.' : `Fetching emotes for ${chalk.bold(channel)}.`
+  const spinner = ora(msg)
   spinner.start()
 
   // make sure all images have been fetched before continuing
@@ -96,8 +97,8 @@ const handleConnect = async (channel) => {
 
   spinner.succeed()
 
-  await fetchEmotes(GLOBAL_CHANNEL, globalEmotes)
-  await fetchEmotes(channel, channelEmotes)
+  await fetchEmotes(GLOBAL_CHANNEL, globalEmotes, true)
+  await fetchEmotes(channel, channelEmotes, false)
 
   const emotes = createEmoteMap([globalEmotes, channelEmotes])
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))

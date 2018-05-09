@@ -16,14 +16,52 @@ const hexToRgb = (hex) => {
   }
 }
 
-const getMsgWithEmotes = (message, emotes) => {
-  const words = message.split(/\s+/)
-  return trim(words.map(word => {
+const boldMentions = (words) => {
+  return words.map(word => {
+    if (word.startsWith('@')) {
+      return chalk.bold(word)
+    }
+    return word
+  })
+}
+
+const replaceEmotes = (words, emotes) => {
+  return words.map(word => {
     if (word in emotes) {
       return emotes[word] + '\n'
     }
     return word
-  }).join(' '))
+  })
+}
+
+const getStyledMessage = (message, emotes) => {
+  let words = message.split(/\s+/)
+  const pipeline = [boldMentions, replaceEmotes]
+  pipeline.forEach(pipe => {
+    words = pipe(words, emotes)
+  })
+  return trim(words.join(' '))
+}
+
+const getBadge = (user) => {
+  const modBadge = user.mod ? '⚔️' : ''
+  const subBadge = user.subscriber ? '🌟' : ''
+  const turboBadge = user.turbo ? '🔋' : ''
+
+  return `${modBadge}${subBadge}${turboBadge}`
+}
+
+const getUserDisplayName = (user) => {
+  const badge = getBadge(user)
+  let displayName = `${badge}${user.username}`
+  if (user.color) {
+    const rgb = hexToRgb(user.color)
+    displayName = `${chalk.rgb(rgb.red, rgb.green, rgb.blue).bold(displayName)}`
+  } else {
+    displayName = `${chalk.bold(displayName)}`
+  }
+
+  return displayName
 }
 
 const connect = (login, channel, emotes) => {
@@ -47,16 +85,8 @@ const connect = (login, channel, emotes) => {
       return
     }
 
-    const subscriberBadge = user.subscriber ? '🌟' : ''
-    const turboBadge = user.turbo ? '🔋' : ''
-    let displayName = `${subscriberBadge}${turboBadge}${user.username}`
-    if (user.color) {
-      const rgb = hexToRgb(user.color)
-      displayName = `${chalk.rgb(rgb.red, rgb.green, rgb.blue).bold(displayName)}`
-    } else {
-      displayName = `${chalk.bold(displayName)}`
-    }
-    const displayMessage = getMsgWithEmotes(message, emotes)
+    const displayName = getUserDisplayName(user)
+    const displayMessage = getStyledMessage(message, emotes)
 
     console.log(`${displayName}: ${displayMessage}`)
   })
