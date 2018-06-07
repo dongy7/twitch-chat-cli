@@ -10,6 +10,7 @@ const request = require('request-promise')
 const Promise = require('bluebird')
 const writeFile = Promise.promisify(fs.writeFile)
 const termImg = require('term-img')
+const rimraf = require('rimraf')
 
 const config = require('./config')
 const connect = require('./client')
@@ -122,20 +123,35 @@ const handleConnect = async channel => {
   )
 }
 
-program.version('1.0.0')
+program.version('1.2.4')
 
-program.command('add <username> <token>').action((username, token, cmd) => {
-  fs.ensureDirSync(CONFIG_DIR)
-  const login = {
-    username,
-    token
-  }
+program
+  .command('add <username> <token>')
+  .description('Add an OAuth token')
+  .action((username, token, cmd) => {
+    fs.ensureDirSync(CONFIG_DIR)
+    const login = {
+      username,
+      token
+    }
 
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(login))
-})
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(login))
+  })
 
-program.command('connect <channel>').action((channel, cmd) => {
-  handleConnect(channel)
-})
+program
+  .command('connect <channel>')
+  .description('Connect to a specified Twitch channel')
+  .action((channel, cmd) => {
+    handleConnect(channel)
+  })
+
+program
+  .command('clear')
+  .description('Clear cached emoticons')
+  .action(cmd => {
+    rimraf(IMAGES_DIR, () => {
+      console.log('Cached emoticons cleared 🗑️.')
+    })
+  })
 
 program.parse(process.argv)

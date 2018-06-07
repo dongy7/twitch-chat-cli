@@ -42,6 +42,7 @@
     "prompt": "^1.0.0",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
+    "rimraf": "^2.6.2",
     "term-img": "^2.1.0",
     "tmi.js": "^1.2.1",
     "trim-newlines": "^2.0.0"
