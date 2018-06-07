@@ -3,9 +3,9 @@ const chalk = require('chalk')
 const trim = require('trim-newlines')
 const ora = require('ora')
 
-const hex2dec = (hex) => parseInt(hex, 16)
+const hex2dec = hex => parseInt(hex, 16)
 
-const hexToRgb = (hex) => {
+const hexToRgb = hex => {
   const hexRed = hex.substring(1, 3)
   const hexGreen = hex.substring(3, 5)
   const hexBlue = hex.substring(5, 7)
@@ -17,7 +17,7 @@ const hexToRgb = (hex) => {
   }
 }
 
-const boldMentions = (words) => {
+const boldMentions = words => {
   return words.map(word => {
     if (word.startsWith('@')) {
       return chalk.bold(word)
@@ -39,12 +39,15 @@ const getStyledMessage = (message, emotes) => {
   let words = message.split(/\s+/)
   const pipeline = [boldMentions, replaceEmotes]
   pipeline.forEach(pipe => {
-    words = pipe(words, emotes)
+    words = pipe(
+      words,
+      emotes
+    )
   })
   return trim(words.join(' '))
 }
 
-const getBadge = (user) => {
+const getBadge = user => {
   const modBadge = user.mod ? '⚔️' : ''
   const subBadge = user.subscriber ? '🌟' : ''
   const turboBadge = user.turbo ? '🔋' : ''
@@ -52,7 +55,7 @@ const getBadge = (user) => {
   return `${modBadge}${subBadge}${turboBadge}`
 }
 
-const getUserDisplayName = (user) => {
+const getUserDisplayName = user => {
   const badge = getBadge(user)
   let displayName = `${badge}${user.username}`
   if (user.color) {
@@ -81,7 +84,9 @@ const connect = (login, channel, emotes) => {
   }
 
   const client = new tmi.Client(options)
-  const spinner = ora(`Connecting to ${chalk.underline(`twitch.tv/${channel}`)}.`)
+  const spinner = ora(
+    `Connecting to ${chalk.underline(`twitch.tv/${channel}`)}.`
+  )
   spinner.start()
 
   client.on('chat', (channel, user, message, self) => {

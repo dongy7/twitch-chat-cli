@@ -29,6 +29,9 @@
     "emote",
     "emoticon"
   ],
+  "scripts": {
+    "format": "prettier cli.js client.js config.js --write"
+  },
   "dependencies": {
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
@@ -49,6 +52,7 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint-plugin-standard": "^3.1.0",
+    "prettier": "^1.13.4"
   }
 }

@@ -23,7 +23,7 @@ const API_BASE_URL = config.apiBaseURL
 const EMOTE_API_URL = `${API_BASE_URL}/channels`
 const GLOBAL_CHANNEL = config.globalChannel
 
-const getEmotes = async (channel) => {
+const getEmotes = async channel => {
   const url = `${EMOTE_API_URL}/${channel}`
   const res = await fetch(url)
   const json = await res.json()
@@ -31,25 +31,29 @@ const getEmotes = async (channel) => {
 }
 
 const fetchEmotes = async (channel, emotes, isGlobal) => {
-  const msg = isGlobal ? 'Fetching global emotes.' : `Fetching emotes for ${chalk.bold(channel)}.`
+  const msg = isGlobal
+    ? 'Fetching global emotes.'
+    : `Fetching emotes for ${chalk.bold(channel)}.`
   const spinner = ora(msg)
   spinner.start()
 
   // make sure all images have been fetched before continuing
-  await Promise.all(emotes.map(async emote => {
-    const { id } = emote
-    const dest = path.join(IMAGES_DIR, `${id}.png`)
-    const data = await request({
-      url: `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`,
-      encoding: null
+  await Promise.all(
+    emotes.map(async emote => {
+      const { id } = emote
+      const dest = path.join(IMAGES_DIR, `${id}.png`)
+      const data = await request({
+        url: `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`,
+        encoding: null
+      })
+      const buf = Buffer.from(data, 'utf8')
+      await writeFile(dest, buf)
     })
-    const buf = Buffer.from(data, 'utf8')
-    await writeFile(dest, buf)
-  }))
+  )
   spinner.succeed()
 }
 
-const createEmoteMap = (emoteList) => {
+const createEmoteMap = emoteList => {
   const map = {}
   emoteList.forEach(emotes => {
     emotes.forEach(emote => {
@@ -62,9 +66,13 @@ const createEmoteMap = (emoteList) => {
   return map
 }
 
-const handleConnect = async (channel) => {
+const handleConnect = async channel => {
   if (!fs.existsSync(CONFIG_DIR) || !fs.existsSync(CONFIG_FILE)) {
-    console.log(`No login credentials found. First add your oAuth token generated from ${chalk.underline('https://twitchapps.com/tmi/')}`)
+    console.log(
+      `No login credentials found. First add your oAuth token generated from ${chalk.underline(
+        'https://twitchapps.com/tmi/'
+      )}`
+    )
     return
   }
 
@@ -107,28 +115,27 @@ const handleConnect = async (channel) => {
 
   const emotes = api ? createEmoteMap([globalEmotes, channelEmotes]) : {}
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))
-  connect(credentials, channel, emotes)
+  connect(
+    credentials,
+    channel,
+    emotes
+  )
 }
 
-program
-  .version('1.0.0')
+program.version('1.0.0')
 
-program
-  .command('add <username> <token>')
-  .action((username, token, cmd) => {
-    fs.ensureDirSync(CONFIG_DIR)
-    const login = {
-      username,
-      token
-    }
+program.command('add <username> <token>').action((username, token, cmd) => {
+  fs.ensureDirSync(CONFIG_DIR)
+  const login = {
+    username,
+    token
+  }
 
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(login))
-  })
+  fs.writeFileSync(CONFIG_FILE, JSON.stringify(login))
+})
 
-program
-  .command('connect <channel>')
-  .action((channel, cmd) => {
-    handleConnect(channel)
-  })
+program.command('connect <channel>').action((channel, cmd) => {
+  handleConnect(channel)
+})
 
 program.parse(process.argv)
