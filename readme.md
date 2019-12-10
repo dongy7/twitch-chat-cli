@@ -37,6 +37,8 @@ This feature currently only works in [iTerm](https://www.iterm2.com/), which has
 
 To see Twitch emotes as pictures, you will need to have the API server running, which allows the CLI to query for global and channel specific emotes. You will need to have [Docker](https://www.docker.com/community-edition) installed to run the server.
 
+You will need to have [Git LFS](https://github.com/git-lfs/git-lfs) installed.
+
 First clone this repo:
 
 ```sh

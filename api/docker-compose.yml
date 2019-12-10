@@ -18,3 +18,4 @@ services:
       - postgres
     environment:
       DATABASE_URL: postgres://postgres:password@postgres/emotes
+    command: ['./wait-for-it.sh', 'postgres:5432', '--', 'npm', 'start']
