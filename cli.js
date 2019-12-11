@@ -39,19 +39,35 @@ const fetchEmotes = async (channel, emotes, isGlobal) => {
   spinner.start()
 
   // make sure all images have been fetched before continuing
-  await Promise.all(
-    emotes.map(async emote => {
-      const { id } = emote
-      const dest = path.join(IMAGES_DIR, `${id}.png`)
-      const data = await request({
-        url: `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`,
-        encoding: null
+  try {
+    await Promise.all(
+      emotes.map(async emote => {
+        const { id } = emote
+        const dest = path.join(IMAGES_DIR, `${id}.png`)
+        const url = `https://static-cdn.jtvnw.net/emoticons/v1/${id}/2.0`
+        try {
+          const data = await request({
+            url,
+            encoding: null
+          })
+          const buf = Buffer.from(data, 'utf8')
+          await writeFile(dest, buf)
+        } catch (err) {
+          console.error(`error fetching ${url}`)
+        }
       })
-      const buf = Buffer.from(data, 'utf8')
-      await writeFile(dest, buf)
-    })
-  )
+    )
+  } catch (err) {
+    console.error(err.msg)
+    const failMsg = isGlobal
+      ? 'Failed to fetch global emotes'
+      : 'Failed to fetch channel emotes'
+    spinner.fail(failMsg)
+    return false
+  }
+
   spinner.succeed()
+  return true
 }
 
 const createEmoteMap = emoteList => {
@@ -116,11 +132,7 @@ const handleConnect = async channel => {
 
   const emotes = api ? createEmoteMap([globalEmotes, channelEmotes]) : {}
   const credentials = JSON.parse(fs.readFileSync(CONFIG_FILE))
-  connect(
-    credentials,
-    channel,
-    emotes
-  )
+  connect(credentials, channel, emotes)
 }
 
 program.version('1.2.4')
