@@ -49,7 +49,7 @@ Start the Docker containers from the `api` directory:
 
 ```sh
 $ cd api
-$ docker-compose up
+$ docker-compose up -d
 ```
 
 The server should now be running at `http://localhost:3000/`.
