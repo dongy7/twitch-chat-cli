@@ -9,7 +9,7 @@
     "dev": "nodemon ./index.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "pg": "^7.14.0"
   },
   "devDependencies": {
